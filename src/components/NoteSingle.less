@@ -1,0 +1,33 @@
+.noteSingle__grid {
+  width: 400px;
+  min-height: 150px;
+  .noteSingle__grid__paper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    .noteSingle__grid__paper__actionArea {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      .noteSingle__grid__paper__actionArea__content {
+        flex-grow: 1;
+        &__title {
+          margin: 6px 12px;
+        }
+        &__body {
+          margin: 6px 12px;
+        }
+      }
+    }
+    &__actions {
+      justify-content: flex-end;
+    }
+    &__loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+  }
+}

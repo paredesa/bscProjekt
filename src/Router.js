@@ -1,19 +1,30 @@
 import React, { Component } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Notes from "./pages/Notes";
 import NavBar from "./components/NavBar";
+import NoteDetail from "./pages/NoteDetailPage";
 
 export default class Router extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      lang: "CZ"
+    };
+  }
   render() {
     return (
       <React.Fragment>
-        <NavBar />
         <BrowserRouter>
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/notes" component={Notes} />
-          </Switch>
+          <NavBar />
+          <Route
+            exact
+            path="/"
+            render={props => <Home {...props} lang={this.state.lang} />}
+          />
+          <Route exact path="/notes" component={Notes} />
+          <Route exact path="/notes/:id" component={NoteDetail} />
         </BrowserRouter>
       </React.Fragment>
     );
