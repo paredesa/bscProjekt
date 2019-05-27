@@ -8,7 +8,7 @@ export default class Notes extends Component {
     return (
       <div>
         <Body>
-          <NotesAll history={this.props.history} />
+          <NotesAll history={this.props.history} lang={this.props.lang} />
         </Body>
       </div>
     );
@@ -16,5 +16,6 @@ export default class Notes extends Component {
 }
 
 Notes.propTypes = {
+  lang: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired
 };

@@ -21,8 +21,8 @@ class Delete extends Component {
             method: "DELETE"
           }
         );
-        this.props.deleteMethod(this.props.id);
         this.props.setCustomState({ deleteDialog: false });
+        this.props.deleteMethod(this.props.id);
       } catch (error) {
         console.log(error);
       }
@@ -30,6 +30,7 @@ class Delete extends Component {
   }
 
   render() {
+    const { lang } = this.props;
     return (
       <Dialog
         open={this.props.open}
@@ -39,10 +40,14 @@ class Delete extends Component {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Smazání poznámky</DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          {lang === "CZ" && "Smazání poznámky"}
+          {lang === "EN" && "Delete note"}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Opravdu chcete smazat tuto poznámku ?
+            {lang === "CZ" && "Opravdu chcete smazat tuto poznámku ?"}
+            {lang === "EN" && "Do you really want to delete this note ?"}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -52,10 +57,12 @@ class Delete extends Component {
             }}
             color="primary"
           >
-            Nesouhlasím
+            {lang === "CZ" && "Nesouhlasím"}
+            {lang === "EN" && "Disagree"}
           </Button>
           <Button onClick={this.deleteClick} color="primary" autoFocus>
-            Souhlasím
+            {lang === "CZ" && "Souhlasím"}
+            {lang === "EN" && "Agree"}
           </Button>
         </DialogActions>
       </Dialog>
@@ -64,6 +71,7 @@ class Delete extends Component {
 }
 
 Delete.propTypes = {
+  lang: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
   setCustomState: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired

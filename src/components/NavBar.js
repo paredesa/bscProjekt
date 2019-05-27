@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import Toolbar from "@material-ui/core/Toolbar";
 import AppBar from "@material-ui/core/AppBar";
 import IconButton from "@material-ui/core/IconButton";
@@ -10,6 +11,7 @@ import "./NavBar.less";
 
 export default class NavBar extends Component {
   render() {
+    const { lang } = this.props;
     return (
       <div>
         <AppBar position="static">
@@ -25,7 +27,8 @@ export default class NavBar extends Component {
               </IconButton>
             </Link>
             <div className="spacer" />
-            <IconButton color="inherit">
+            {lang}
+            <IconButton onClick={this.props.changeLang} color="inherit">
               <LanguageIcon />
             </IconButton>
           </Toolbar>
@@ -34,3 +37,8 @@ export default class NavBar extends Component {
     );
   }
 }
+
+NavBar.propTypes = {
+  lang: PropTypes.string.isRequired,
+  changeLang: PropTypes.func.isRequired
+};

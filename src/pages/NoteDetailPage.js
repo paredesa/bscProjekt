@@ -7,13 +7,19 @@ class NoteDetailPage extends Component {
   render() {
     return (
       <Body>
-        <NoteDetail match={this.props.match} />
+        <NoteDetail
+          lang={this.props.lang}
+          match={this.props.match}
+          history={this.props.history}
+        />
       </Body>
     );
   }
 }
 
 NoteDetailPage.propTypes = {
+  lang: PropTypes.string.isRequired,
+  history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired
 };
 

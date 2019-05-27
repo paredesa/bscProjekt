@@ -6,7 +6,7 @@ module.exports = {
     publicPath: "/"
   },
   devServer: {
-    historyApiFallback: true
+    port: 9000
   },
   module: {
     rules: [

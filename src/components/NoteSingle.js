@@ -13,9 +13,9 @@ import {
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import "./NoteSingle.less";
-import Edit from "./Edit";
 import Delete from "./Delete";
+import Edit from "./Edit";
+import "./NoteSingle.less";
 
 class NoteSingle extends Component {
   constructor(props) {
@@ -81,6 +81,7 @@ class NoteSingle extends Component {
               </CardActions>
               {this.state.dialogOpen && (
                 <Edit
+                  lang={this.props.lang}
                   open={this.state.dialogOpen}
                   note={this.state.note}
                   edit={true}
@@ -89,6 +90,7 @@ class NoteSingle extends Component {
               )}
               {this.state.deleteDialog && (
                 <Delete
+                  lang={this.props.lang}
                   open={this.state.deleteDialog}
                   id={this.state.note.id}
                   deleteMethod={this.props.deleteMethod}
@@ -104,8 +106,9 @@ class NoteSingle extends Component {
 }
 
 NoteSingle.propTypes = {
+  lang: PropTypes.string.isRequired,
   history: PropTypes.object,
-  deleteMethod: PropTypes.func.isRequired,
+  deleteMethod: PropTypes.func,
   note: PropTypes.object,
   loading: PropTypes.bool
 };

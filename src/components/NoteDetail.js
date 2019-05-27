@@ -10,8 +10,10 @@ import {
   IconButton
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 import "./NoteDetail.less";
 import Edit from "./Edit";
+import Delete from "./Delete";
 class NoteDetail extends Component {
   constructor(props) {
     super(props);
@@ -19,20 +21,30 @@ class NoteDetail extends Component {
     this.state = {
       note: {},
       loading: false,
-      dialogOpen: false
+      dialogOpen: false,
+      deleteDialog: false
     };
 
     this.fetchNote = async () => {
       this.setState({ loading: true });
+      try {
+        const response = await fetch(
+          "http://jsonplaceholder.typicode.com/posts/" +
+            this.props.match.params.id
+        );
+        const json = await response.json();
 
-      const response = await fetch(
-        "http://jsonplaceholder.typicode.com/posts/" +
-          this.props.match.params.id
-      );
-      const json = await response.json();
+        this.setState({ note: json, loading: false });
 
-      this.setState({ note: json, loading: false });
-      console.log(json);
+        if (!response.ok) this.props.history.push("/notes");
+        console.log(json);
+      } catch (error) {
+        this.props.history.push("/notes");
+      }
+    };
+
+    this.deleteMethod = () => {
+      this.props.history.push("/notes");
     };
 
     this.setCustomState = state => {
@@ -61,18 +73,32 @@ class NoteDetail extends Component {
               <div className="noteDetail__content__body">{note.body}</div>
             </CardContent>
             <CardActions className="noteDetail__actions">
-              <IconButton
-                onClick={() => this.setCustomState({ dialogOpen: true })}
-              >
+              <IconButton onClick={() => this.setState({ dialogOpen: true })}>
                 <EditIcon />
               </IconButton>
+              <IconButton onClick={() => this.setState({ deleteDialog: true })}>
+                <DeleteIcon />
+              </IconButton>
             </CardActions>
-            <Edit
-              open={this.state.dialogOpen}
-              edit={true}
-              note={this.state.note}
-              setCustomState={this.setCustomState}
-            />
+            {this.state.dialogOpen && (
+              <Edit
+                open={this.state.dialogOpen}
+                edit={true}
+                note={this.state.note}
+                lang={this.props.lang}
+                setCustomState={this.setCustomState}
+              />
+            )}
+
+            {this.state.deleteDialog && (
+              <Delete
+                open={this.state.deleteDialog}
+                id={this.state.note.id}
+                deleteMethod={this.deleteMethod}
+                lang={this.props.lang}
+                setCustomState={this.setCustomState}
+              />
+            )}
           </React.Fragment>
         )}
       </Card>
@@ -81,6 +107,8 @@ class NoteDetail extends Component {
 }
 
 NoteDetail.propTypes = {
+  lang: PropTypes.string.isRequired,
+  history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired
 };
 
