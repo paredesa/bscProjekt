@@ -8,7 +8,7 @@ Nainstaluje všechny potřebné dependencies.
 
 ### `npm start`
 
-Pro start aplikace v vývojovém módu.<br>
+Pro start aplikace ve vývojovém módu.<br>
 Aplikace se otevře v novém prohlížečovém okně na [http://localhost:9000/](http://localhost:9000/).
 
 ### `npm run build`
