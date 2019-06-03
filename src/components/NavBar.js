@@ -27,7 +27,7 @@ export default class NavBar extends Component {
               </IconButton>
             </Link>
             <div className="spacer" />
-            {lang}
+            {lang.getLanguage().toUpperCase()}
             <IconButton onClick={this.props.changeLang} color="inherit">
               <LanguageIcon />
             </IconButton>
@@ -39,6 +39,6 @@ export default class NavBar extends Component {
 }
 
 NavBar.propTypes = {
-  lang: PropTypes.string.isRequired,
+  lang: PropTypes.object.isRequired,
   changeLang: PropTypes.func.isRequired
 };

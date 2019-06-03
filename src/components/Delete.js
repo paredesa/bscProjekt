@@ -6,14 +6,20 @@ import {
   DialogContent,
   DialogContentText,
   Button,
-  DialogActions
+  DialogActions,
+  CircularProgress
 } from "@material-ui/core";
 
 class Delete extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      loading: false
+    };
+
     this.deleteClick = async () => {
+      this.setState({ loading: true });
       try {
         await fetch(
           "http://jsonplaceholder.typicode.com/posts/" + this.props.id,
@@ -26,43 +32,50 @@ class Delete extends Component {
       } catch (error) {
         console.log(error);
       }
+
+      this.setState({ loading: false });
     };
   }
 
   render() {
-    const { lang } = this.props;
+    const { loading } = this.state;
+    const { lang, open, setCustomState } = this.props;
     return (
       <Dialog
-        open={this.props.open}
+        open={open}
         onClose={() => {
-          this.props.setCustomState({ deleteDialog: false });
+          setCustomState({ deleteDialog: false });
         }}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {lang === "CZ" && "Smazání poznámky"}
-          {lang === "EN" && "Delete note"}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">{lang.delete.title}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {lang === "CZ" && "Opravdu chcete smazat tuto poznámku ?"}
-            {lang === "EN" && "Do you really want to delete this note ?"}
+            {lang.delete.content}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
+            disabled={loading}
             onClick={() => {
-              this.props.setCustomState({ deleteDialog: false });
+              setCustomState({ deleteDialog: false });
             }}
             color="primary"
           >
-            {lang === "CZ" && "Nesouhlasím"}
-            {lang === "EN" && "Disagree"}
+            {lang.delete.cancel}
           </Button>
-          <Button onClick={this.deleteClick} color="primary" autoFocus>
-            {lang === "CZ" && "Souhlasím"}
-            {lang === "EN" && "Agree"}
+          <Button
+            disabled={loading}
+            onClick={this.deleteClick}
+            color="primary"
+            autoFocus
+          >
+            {loading ? (
+              <CircularProgress size={20} />
+            ) : (
+              <React.Fragment>{lang.delete.confirm}</React.Fragment>
+            )}
           </Button>
         </DialogActions>
       </Dialog>
@@ -71,7 +84,7 @@ class Delete extends Component {
 }
 
 Delete.propTypes = {
-  lang: PropTypes.string.isRequired,
+  lang: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
   setCustomState: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired

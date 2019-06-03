@@ -16,6 +16,6 @@ export default class Notes extends Component {
 }
 
 Notes.propTypes = {
-  lang: PropTypes.string.isRequired,
+  lang: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired
 };

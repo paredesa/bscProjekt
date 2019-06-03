@@ -37,7 +37,6 @@ class NoteDetail extends Component {
         this.setState({ note: json, loading: false });
 
         if (!response.ok) this.props.history.push("/notes");
-        console.log(json);
       } catch (error) {
         this.props.history.push("/notes");
       }
@@ -56,7 +55,8 @@ class NoteDetail extends Component {
     this.fetchNote();
   }
   render() {
-    const { note, loading } = this.state;
+    const { lang } = this.props;
+    const { note, loading, dialogOpen, deleteDialog } = this.state;
     return (
       <Card className="noteDetail">
         {loading ? (
@@ -80,22 +80,22 @@ class NoteDetail extends Component {
                 <DeleteIcon />
               </IconButton>
             </CardActions>
-            {this.state.dialogOpen && (
+            {dialogOpen && (
               <Edit
-                open={this.state.dialogOpen}
+                open={dialogOpen}
                 edit={true}
-                note={this.state.note}
-                lang={this.props.lang}
+                note={note}
+                lang={lang}
                 setCustomState={this.setCustomState}
               />
             )}
 
-            {this.state.deleteDialog && (
+            {deleteDialog && (
               <Delete
-                open={this.state.deleteDialog}
-                id={this.state.note.id}
+                open={deleteDialog}
+                id={note.id}
                 deleteMethod={this.deleteMethod}
-                lang={this.props.lang}
+                lang={lang}
                 setCustomState={this.setCustomState}
               />
             )}
@@ -107,7 +107,7 @@ class NoteDetail extends Component {
 }
 
 NoteDetail.propTypes = {
-  lang: PropTypes.string.isRequired,
+  lang: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired
 };

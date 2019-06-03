@@ -41,7 +41,8 @@ class NoteSingle extends Component {
   }
 
   render() {
-    const { loading } = this.props;
+    const { note, dialogOpen, deleteDialog } = this.state;
+    const { loading, lang, deleteMethod } = this.props;
     return (
       <Grid className="noteSingle__grid" item>
         <Card elevation={3} className="noteSingle__grid__paper">
@@ -60,11 +61,11 @@ class NoteSingle extends Component {
                     className="noteSingle__grid__paper__actionArea__content__title"
                     variant="h6"
                   >
-                    {this.state.note.title}
+                    {note.title}
                   </Typography>
                   <Divider />
                   <div className="noteSingle__grid__paper__actionArea__content__body">
-                    {this.state.note.body}
+                    {note.body}
                   </div>
                   <div />
                 </CardContent>
@@ -79,21 +80,21 @@ class NoteSingle extends Component {
                   <DeleteIcon />
                 </IconButton>
               </CardActions>
-              {this.state.dialogOpen && (
+              {dialogOpen && (
                 <Edit
-                  lang={this.props.lang}
-                  open={this.state.dialogOpen}
-                  note={this.state.note}
+                  lang={lang}
+                  open={dialogOpen}
+                  note={note}
                   edit={true}
                   setCustomState={this.setCustomState}
                 />
               )}
-              {this.state.deleteDialog && (
+              {deleteDialog && (
                 <Delete
-                  lang={this.props.lang}
-                  open={this.state.deleteDialog}
-                  id={this.state.note.id}
-                  deleteMethod={this.props.deleteMethod}
+                  lang={lang}
+                  open={deleteDialog}
+                  id={note.id}
+                  deleteMethod={deleteMethod}
                   setCustomState={this.setCustomState}
                 />
               )}
@@ -106,7 +107,7 @@ class NoteSingle extends Component {
 }
 
 NoteSingle.propTypes = {
-  lang: PropTypes.string.isRequired,
+  lang: PropTypes.object.isRequired,
   history: PropTypes.object,
   deleteMethod: PropTypes.func,
   note: PropTypes.object,

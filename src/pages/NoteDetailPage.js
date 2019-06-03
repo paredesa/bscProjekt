@@ -18,7 +18,7 @@ class NoteDetailPage extends Component {
 }
 
 NoteDetailPage.propTypes = {
-  lang: PropTypes.string.isRequired,
+  lang: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired
 };

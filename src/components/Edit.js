@@ -6,7 +6,8 @@ import {
   DialogContent,
   TextField,
   DialogActions,
-  Button
+  Button,
+  CircularProgress
 } from "@material-ui/core";
 import "./Edit.less";
 
@@ -16,11 +17,13 @@ class Edit extends Component {
 
     this.state = {
       note: {},
-      edit: false
+      edit: false,
+      loading: false
     };
 
     this.acceptClick = async () => {
       if (this.state.note.title.length > 0) {
+        this.setState({ loading: true });
         if (this.state.edit) {
           try {
             await fetch(
@@ -37,6 +40,7 @@ class Edit extends Component {
           } catch (error) {
             console.log(error);
           }
+          this.setState({ loading: false });
         } else {
           try {
             const response = await fetch(
@@ -54,6 +58,7 @@ class Edit extends Component {
           } catch (error) {
             console.log(error);
           }
+          this.setState({ loading: false });
         }
       }
     };
@@ -72,32 +77,31 @@ class Edit extends Component {
     });
   }
   render() {
-    const { lang } = this.props;
-    const { edit } = this.state;
+    const { lang, open, setCustomState } = this.props;
+    const { edit, note, loading } = this.state;
     return (
       <Dialog
+        classes={{ paper: "edit" }}
+        scroll="body"
+        fullWidth
+        maxWidth="xs"
         className="edit"
-        open={this.props.open}
-        onClose={() => this.props.setCustomState({ dialogOpen: false })}
+        open={open}
+        onClose={() => setCustomState({ dialogOpen: false })}
       >
         <DialogTitle>
           {edit ? (
-            <React.Fragment>
-              {lang === "CZ" && "Upravit poznámku"}
-              {lang === "EN" && "Edit note"}
-            </React.Fragment>
+            <React.Fragment>{lang.edit.title}</React.Fragment>
           ) : (
-            <React.Fragment>
-              {lang === "CZ" && "Přidat poznámku"}
-              {lang === "EN" && "Add note"}
-            </React.Fragment>
+            <React.Fragment>{lang.add.title}</React.Fragment>
           )}
         </DialogTitle>
         <DialogContent className="edit__content">
           <div className="edit__content__field">
             <TextField
-              value={this.state.note.title}
-              label={lang === "CZ" ? "Název" : "Title"}
+              fullWidth
+              value={note.title}
+              label={lang.label.title}
               multiline
               variant="outlined"
               onChange={e => {
@@ -107,11 +111,12 @@ class Edit extends Component {
           </div>
           <div className="edit__content__field">
             <TextField
-              value={this.state.note.body}
-              label={lang === "CZ" ? "Popis" : "Description"}
+              fullWidth
+              value={note.body}
+              label={lang.label.desc}
               multiline
               variant="outlined"
-              rows={4}
+              rows={8}
               onChange={e => {
                 this.updateField("body", e.target.value);
               }}
@@ -120,21 +125,21 @@ class Edit extends Component {
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={() => this.props.setCustomState({ dialogOpen: false })}
+            disabled={loading}
+            onClick={() => setCustomState({ dialogOpen: false })}
           >
-            {lang === "CZ" && "Zrušit"}
-            {lang === "EN" && "Cancel"}
+            {lang.edit.cancel}
           </Button>
-          <Button onClick={this.acceptClick}>
-            {this.state.edit ? (
-              <React.Fragment>
-                {lang === "CZ" && "Upravit"}
-                {lang === "EN" && "Edit"}
-              </React.Fragment>
+          <Button disabled={loading} onClick={this.acceptClick}>
+            {loading ? (
+              <CircularProgress size={20} />
             ) : (
               <React.Fragment>
-                {lang === "CZ" && "Potvrdit"}
-                {lang === "EN" && "Confirm"}
+                {edit ? (
+                  <React.Fragment>{lang.edit.confirm}</React.Fragment>
+                ) : (
+                  <React.Fragment>{lang.add.confirm}</React.Fragment>
+                )}
               </React.Fragment>
             )}
           </Button>
@@ -150,7 +155,7 @@ Edit.propTypes = {
   setCustomState: PropTypes.func.isRequired,
   note: PropTypes.object,
   edit: PropTypes.bool,
-  lang: PropTypes.string.isRequired
+  lang: PropTypes.object.isRequired
 };
 
 export default Edit;

@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import Body from "../components/Body";
+import { Button } from "@material-ui/core";
+import "./Home.less";
 
 export default class Home extends Component {
   render() {
@@ -9,8 +12,14 @@ export default class Home extends Component {
       <div>
         <Body>
           <div>
-            {lang === "CZ" && <React.Fragment>Hlavní stránka</React.Fragment>}
-            {lang === "EN" && <React.Fragment>Main Page</React.Fragment>}
+            <React.Fragment>
+              <p className="home__content">
+                {lang.home.title} <br />
+              </p>
+              <Link to="/notes">
+                <Button variant="outlined">{lang.home.button}</Button>
+              </Link>
+            </React.Fragment>
           </div>
         </Body>
       </div>
@@ -19,5 +28,5 @@ export default class Home extends Component {
 }
 
 Home.propTypes = {
-  lang: PropTypes.string.isRequired
+  lang: PropTypes.object.isRequired
 };

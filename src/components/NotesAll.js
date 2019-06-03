@@ -32,9 +32,7 @@ class NotesAll extends Component {
     this.deleteMethod = id => {
       let copyState = [...this.state.allNotes];
       const index = copyState.findIndex(key => key.id === id);
-      console.log(index);
       copyState.splice(index, 1);
-      console.log(copyState);
       this.setState({ allNotes: copyState, loading: true }, () =>
         this.setState({ loading: false })
       );
@@ -45,7 +43,6 @@ class NotesAll extends Component {
 
       let addItem = note;
       addItem.id = id;
-      console.log(addItem);
       copyState.push(addItem);
       this.setState({ allNotes: copyState });
     };
@@ -60,22 +57,23 @@ class NotesAll extends Component {
   }
 
   render() {
-    const { allNotes, loading } = this.state;
+    const { allNotes, loading, dialogOpen } = this.state;
+    const { lang, history } = this.props;
     return (
       <React.Fragment>
         <Grid container justify="space-evenly" spacing={2}>
           {loading ? (
             <React.Fragment>
               <Grid item>
-                <NoteSingle lang={this.props.lang} loading={true} />
+                <NoteSingle lang={lang} loading={true} />
               </Grid>
             </React.Fragment>
           ) : (
             <React.Fragment>
               {allNotes.map((key, index) => (
                 <NoteSingle
-                  lang={this.props.lang}
-                  history={this.props.history}
+                  lang={lang}
+                  history={history}
                   key={index}
                   note={key}
                   deleteMethod={this.deleteMethod}
@@ -92,10 +90,10 @@ class NotesAll extends Component {
           )}
         </Grid>
 
-        {this.state.dialogOpen && (
+        {dialogOpen && (
           <Edit
-            lang={this.props.lang}
-            open={this.state.dialogOpen}
+            lang={lang}
+            open={dialogOpen}
             addMethod={this.addNote}
             setCustomState={this.setCustomState}
           />
@@ -106,7 +104,7 @@ class NotesAll extends Component {
 }
 
 NotesAll.propTypes = {
-  lang: PropTypes.string.isRequired,
+  lang: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired
 };
 
